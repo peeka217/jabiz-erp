@@ -1,15 +1,13 @@
 package com.jabiz.erp.member.service;
 
 import com.jabiz.erp.exception.NotFoundException;
-import com.jabiz.erp.exception.UnauthenticatedAccessException;
-import com.jabiz.erp.member.controller.dto.MemberRequestDto;
-import com.jabiz.erp.member.controller.dto.TokenDto;
-import com.jabiz.erp.member.controller.dto.TokenResponseDto;
+import com.jabiz.erp.member.controller.dto.MemberRequest;
+import com.jabiz.erp.member.controller.dto.AccessToken;
+import com.jabiz.erp.member.controller.dto.AccessTokenResponse;
 import com.jabiz.erp.member.domain.entity.Member;
 import com.jabiz.erp.member.entry.TokenProvider;
 import com.jabiz.erp.member.infra.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -31,31 +29,31 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public TokenDto signup(MemberRequestDto memberRequestDto) {
-        Member member = memberRequestDto.toMember(passwordEncoder);
+    public AccessTokenResponse signup(MemberRequest memberRequest) {
+        Member member = memberRequest.toMember(passwordEncoder);
         member.setId(memberRepository.save(member).getId());
 
-        TokenDto tokenDto = new TokenDto();
+        AccessToken accessToken = new AccessToken();
         try {
-            tokenDto = tokenProvider.generateTokenDto(Long.toString(member.getId()), "ROLE_USER");
-            tokenDto.setId(member.getId());
-            tokenDto.setNickname(member.getNickname());
+            accessToken = tokenProvider.generateTokenDto(Long.toString(member.getId()), "ROLE_USER");
+            accessToken.setId(member.getId());
+            accessToken.setNickname(member.getNickname());
         } catch (Exception e) {
             throw new RuntimeException();
         }
 
-        return tokenDto;
+        return AccessTokenResponse.of(accessToken, member);
     }
 
     @Transactional
-    public TokenResponseDto signin(MemberRequestDto memberRequestDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+    public AccessTokenResponse signin(MemberRequest memberRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken = memberRequest.toAuthentication();
 
         Authentication authentication;
-        TokenDto tokenDto = new TokenDto();
+        AccessToken accessToken = new AccessToken();
         try {
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            tokenDto = tokenProvider.generateTokenDto(authentication.getName(),
+            accessToken = tokenProvider.generateTokenDto(authentication.getName(),
                     authentication.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.joining(",")));
@@ -72,7 +70,7 @@ public class AuthService {
 //                .build();
 //        refreshTokenRepository.save(refreshToken);
 
-        return TokenResponseDto.of(tokenDto, member);
+        return AccessTokenResponse.of(accessToken, member);
     }
 
 }

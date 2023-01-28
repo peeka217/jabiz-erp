@@ -1,8 +1,7 @@
 package com.jabiz.erp.member.controller;
 
-import com.jabiz.erp.member.controller.dto.MemberRequestDto;
-import com.jabiz.erp.member.controller.dto.TokenDto;
-import com.jabiz.erp.member.controller.dto.TokenResponseDto;
+import com.jabiz.erp.member.controller.dto.MemberRequest;
+import com.jabiz.erp.member.controller.dto.AccessTokenResponse;
 import com.jabiz.erp.member.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +15,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<TokenDto> signup(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.signup(memberRequestDto));
+    public ResponseEntity<AccessTokenResponse> signup(@RequestBody MemberRequest memberRequest) {
+        return ResponseEntity.ok(authService.signup(memberRequest));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<TokenResponseDto> signin(@RequestBody MemberRequestDto memberRequestDto) {
-        return ResponseEntity.ok(authService.signin(memberRequestDto));
+    public ResponseEntity<AccessTokenResponse> signin(@RequestBody MemberRequest memberRequest) {
+        return ResponseEntity.ok(authService.signin(memberRequest));
     }
 
     @GetMapping("/healthcheck")

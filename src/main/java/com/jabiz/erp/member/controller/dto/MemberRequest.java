@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class MemberRequestDto {
+public class MemberRequest {
 
     private String signupCode;
 

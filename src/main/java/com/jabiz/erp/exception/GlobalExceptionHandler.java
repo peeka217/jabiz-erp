@@ -28,4 +28,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, ErrorCode.NOT_FOUND.getCode());
     }
 
+    @ExceptionHandler(value = InvalidTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_TOKEN);
+
+        return new ResponseEntity<>(errorResponse, ErrorCode.INVALID_TOKEN.getCode());
+    }
+
 }

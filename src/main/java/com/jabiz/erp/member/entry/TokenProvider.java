@@ -1,6 +1,6 @@
 package com.jabiz.erp.member.entry;
 
-import com.jabiz.erp.member.controller.dto.TokenDto;
+import com.jabiz.erp.member.controller.dto.AccessToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +32,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public TokenDto generateTokenDto(String id, String accessible) throws ParseException {
+    public AccessToken generateTokenDto(String id, String accessible) throws ParseException {
 
         ZonedDateTime seoulDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -53,7 +53,7 @@ public class TokenProvider {
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return TokenDto.builder()
+        return AccessToken.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn)
@@ -88,6 +88,7 @@ public class TokenProvider {
         } catch (UnsupportedJwtException e) {
         } catch (IllegalArgumentException e) {
         }
+
 
         return false;
     }

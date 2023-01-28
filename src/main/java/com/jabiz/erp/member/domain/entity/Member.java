@@ -37,7 +37,6 @@ public class Member {
                   String birthday, String gender,
                   String marketingYn) {
         this.signupCode = signupCode;
-
         this.realName = realName;
         this.nickname = nickname;
         this.email = email;
