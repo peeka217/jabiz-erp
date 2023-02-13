@@ -12,6 +12,6 @@ import java.util.Optional;
 public class UserAuditorAware implements AuditorAware<Long> {
     @Override
     public Optional<Long> getCurrentAuditor() {
-        return Optional.of(SecurityUtil.getCurrentMemberId());
+        return Optional.of(SecurityUtil.getMemberId());
     }
 }

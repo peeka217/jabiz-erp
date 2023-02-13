@@ -22,14 +22,14 @@ public class PrimitiveEntity {
     private LocalDateTime createdAt;
     @Column(updatable = false)
     @CreatedBy
-    private Long createdBy;
+    protected Long createdBy;
 
     @Column(insertable = false)
     @LastModifiedDate
     private LocalDateTime updatedAt;
     @Column(insertable = false)
     @LastModifiedBy
-    private Long updatedBy;
+    protected Long updatedBy;
 
 
 }

@@ -2,6 +2,7 @@ package com.jabiz.erp.worker.controller.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.jabiz.erp.primitive.entity.constant.StateCode;
 import com.jabiz.erp.worker.domain.entity.Worker;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +16,12 @@ public class WorkerRequest {
 
     private Long id;
 
-    private String realName;
     private String nationalityCode;
-    private String country;
     private String countryCode;
-    private String gender;
+    private String country;
 
+    private String realName;
+    private String gender;
     private String birthday;
     private String residentRegistrationNumber;
     private String residenceStatusCode;
@@ -29,21 +30,23 @@ public class WorkerRequest {
     private String stayTo;
 
     private String phoneNumber;
-    private String bank;
     private String bankCode;
+    private String bank;
     private String accountNumber;
     private String accountHolder;
 
     private String workReportYn;
     private String workRecordId;
 
-    public Worker toWorker() {
+    public Worker toWorkerForRegistration() {
         return Worker.builder()
                 .id(this.id)
-                .realName(this.realName)
+
                 .nationalityCode(this.nationalityCode)
-                .country(this.country)
                 .countryCode(this.countryCode)
+                .country(this.country)
+
+                .realName(this.realName)
                 .gender(this.gender)
                 .birthday(this.birthday)
                 .residentRegistrationNumber(this.residentRegistrationNumber)
@@ -51,13 +54,20 @@ public class WorkerRequest {
                 .stayFrom(this.stayFrom)
                 .stayTo(this.stayTo)
                 .phoneNumber(this.phoneNumber)
-                .bank(this.bank)
                 .bankCode(this.bankCode)
+                .bank(this.bank)
                 .accountNumber(this.accountNumber)
                 .accountHolder(this.accountHolder)
                 .workReportYn(this.workReportYn)
                 .workRecordId(this.workRecordId)
-                .deletedYn("N")
+                .stateCode("WK00")
+                .build();
+    }
+
+    public Worker toWorkerForState(String stateCode) {
+        return Worker.builder()
+                .id(this.id)
+                .stateCode(stateCode)
                 .build();
     }
 

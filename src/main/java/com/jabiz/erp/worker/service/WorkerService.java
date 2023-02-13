@@ -1,7 +1,10 @@
 package com.jabiz.erp.worker.service;
 
+import com.jabiz.erp.primitive.entity.constant.StateCode;
+import com.jabiz.erp.util.SecurityUtil;
 import com.jabiz.erp.worker.controller.dto.WorkerRequest;
 import com.jabiz.erp.worker.controller.dto.WorkerResponse;
+import com.jabiz.erp.worker.controller.dto.WorkerSearchCriteria;
 import com.jabiz.erp.worker.domain.entity.Worker;
 import com.jabiz.erp.worker.infra.WorkerRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +20,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkerService {
 
-    private static final int DEFAULT_PAGING_SIZE = 25;
+    private static final int DEFAULT_PAGING_SIZE = 15;
 
     private final WorkerRepository workerRepository;
 
-    public List<WorkerResponse> lookUpWorker(String nationalityCode, int pagingNumber , int pagingSize) {
-        List<Worker> workers = workerRepository.findByNationalityCodeAndDeletedYn(nationalityCode, "N",
-                PageRequest.of(pagingNumber, pagingSize, Sort.by(Sort.Order.desc("id")))).getContent();
+    public List<WorkerResponse> lookUpWorkers(WorkerSearchCriteria searchCriteria, int pagingNumber , int pagingSize) {
+        List<Worker> workers = workerRepository.findWithSearchCriteria(searchCriteria,
+                PageRequest.of(pagingNumber, pagingSize)).getContent();
 
         List<WorkerResponse> workerResponses = new ArrayList<>();
         workers.forEach(worker -> {
@@ -34,23 +37,21 @@ public class WorkerService {
     }
 
     @Transactional
-    public List<WorkerResponse> saveWorker(String nationalityCode, List<WorkerRequest> workerRequests) {
+    public List<WorkerResponse> saveWorkers(List<WorkerRequest> workerRequests) {
         workerRequests.forEach(workerRequest -> {
-            workerRepository.save(workerRequest.toWorker());
+            workerRepository.save(workerRequest.toWorkerForRegistration());
         });
 
-        return this.lookUpWorker(nationalityCode, 0, DEFAULT_PAGING_SIZE);
+        return this.lookUpWorkers(WorkerSearchCriteria.builder()
+                .nationalityCode(workerRequests.get(0).getNationalityCode()).build(),
+                0, DEFAULT_PAGING_SIZE);
     }
 
     @Transactional
-    public void deleteWorker(List<WorkerRequest> workerRequests) {
+    public void deleteWorkers(List<WorkerRequest> workerRequests) {
         workerRequests.forEach(workerRequest -> {
-            Worker worker = workerRequest.toWorker();
-            worker.setDeletedYn("Y");
-            workerRepository.save(worker);
+            workerRepository.updateWorkerState(workerRequest.toWorkerForState("WO"));
         });
     }
-
-
 
 }

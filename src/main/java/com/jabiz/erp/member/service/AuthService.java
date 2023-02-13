@@ -35,7 +35,7 @@ public class AuthService {
 
         AccessToken accessToken = new AccessToken();
         try {
-            accessToken = tokenProvider.generateTokenDto(Long.toString(member.getId()), "ROLE_USER");
+            accessToken = tokenProvider.generateAccessToken(member, "ROLE_USER");
             accessToken.setId(member.getId());
             accessToken.setNickname(member.getNickname());
         } catch (Exception e) {
@@ -51,24 +51,15 @@ public class AuthService {
 
         Authentication authentication;
         AccessToken accessToken = new AccessToken();
+        Member member;
         try {
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            accessToken = tokenProvider.generateTokenDto(authentication.getName(),
-                    authentication.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority)
-                            .collect(Collectors.joining(",")));
+            member = memberRepository.findById(Long.parseLong(authentication.getName()))
+                    .orElseThrow(() -> new NotFoundException());
+            accessToken = tokenProvider.generateAccessToken(member, "ROLE_USER");
         } catch (Exception e) {
             throw new NotFoundException();
         }
-
-        Member member = memberRepository.findById(Long.parseLong(authentication.getName()))
-                .orElseThrow(() -> new NotFoundException());
-
-//        RefreshToken refreshToken = RefreshToken.builder()
-//                .id(authentication.getName())
-//                .refreshToken(tokenDto.getRefreshToken())
-//                .build();
-//        refreshTokenRepository.save(refreshToken);
 
         return AccessTokenResponse.of(accessToken, member);
     }

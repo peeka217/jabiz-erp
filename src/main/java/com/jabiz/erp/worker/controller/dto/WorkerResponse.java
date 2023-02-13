@@ -12,11 +12,12 @@ public class WorkerResponse {
 
     private Long id;
 
-    private String realName;
-    private String country;
+    private String nationalityCode;
     private String countryCode;
-    private String gender;
+    private String country;
 
+    private String realName;
+    private String gender;
     private String birthday;
     private String residentRegistrationNumber;
     private String residenceStatusCode;
@@ -25,8 +26,8 @@ public class WorkerResponse {
     private String stayTo;
 
     private String phoneNumber;
-    private String bank;
     private String bankCode;
+    private String bank;
     private String accountNumber;
     private String accountHolder;
 
@@ -37,9 +38,11 @@ public class WorkerResponse {
         return WorkerResponse.builder()
                 .id(worker.getId())
 
-                .realName(worker.getRealName())
-                .country(worker.getCountry())
+                .nationalityCode(worker.getNationalityCode())
                 .countryCode(worker.getCountryCode())
+                .country(worker.getCountry())
+                .realName(worker.getRealName())
+
                 .gender(worker.getGender())
 
                 .birthday(worker.getBirthday())
@@ -62,17 +65,20 @@ public class WorkerResponse {
 
     @Builder
     public WorkerResponse(Long id,
-                          String realName, String country, String countryCode, String gender,
+                          String nationalityCode, String country, String countryCode,
+                          String realName, String gender,
                           String birthday, String residentRegistrationNumber, String residenceStatusCode,
                           String stayFrom, String stayTo,
                           String phoneNumber,
-                          String bank, String bankCode, String accountNumber, String accountHolder,
+                          String bankCode, String bank, String accountNumber, String accountHolder,
                           String workReportYn, String workRecordId) {
         this.id = id;
 
-        this.realName = realName;
+        this.nationalityCode = nationalityCode;
         this.country = country;
         this.countryCode = countryCode;
+
+        this.realName = realName;
         this.gender = gender;
 
         this.birthday = birthday;
@@ -82,8 +88,8 @@ public class WorkerResponse {
         this.stayTo = stayTo;
 
         this.phoneNumber = phoneNumber;
-        this.bank = bank;
         this.bankCode = bankCode;
+        this.bank = bank;
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
 

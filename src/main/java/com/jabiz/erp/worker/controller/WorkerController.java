@@ -2,6 +2,7 @@ package com.jabiz.erp.worker.controller;
 
 import com.jabiz.erp.worker.controller.dto.WorkerRequest;
 import com.jabiz.erp.worker.controller.dto.WorkerResponse;
+import com.jabiz.erp.worker.controller.dto.WorkerSearchCriteria;
 import com.jabiz.erp.worker.service.WorkerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,30 +16,36 @@ public class WorkerController {
 
     private final WorkerService workerService;
 
-    @GetMapping("/worker")
-    public ResponseEntity<List<WorkerResponse>> lookUpWorker(@RequestParam(value = "country_code") String countryCode,
-                                                             @RequestParam(value = "paging_number") int pagingNumber,
-                                                             @RequestParam(value = "paging_size") int pagingSize) {
-        return ResponseEntity.ok(workerService.lookUpWorker(countryCode, pagingNumber, pagingSize));
+    @GetMapping("/workers")
+    public ResponseEntity<List<WorkerResponse>> lookUpWorkers(@RequestParam(value = "nationality_code", required = false) String nationalityCode,
+                                                              @RequestParam(value = "real_name", required = false) String realName,
+                                                              @RequestParam(value = "birthday", required = false) String birthday,
+                                                              @RequestParam(value = "phone_number", required = false) String phoneNumber,
+                                                              @RequestParam(value = "account_number", required = false) String accountNumber,
+                                                              @RequestParam(value = "paging_number") int pagingNumber,
+                                                              @RequestParam(value = "paging_size") int pagingSize) {
+        return ResponseEntity.ok(workerService.lookUpWorkers(WorkerSearchCriteria.builder()
+                .nationalityCode(nationalityCode)
+                .realName(realName)
+                .birthday(birthday)
+                .phoneNumber(phoneNumber)
+                .accountNumber(accountNumber)
+                .build(), pagingNumber, pagingSize));
     }
 
-    @PostMapping("/worker")
-    public ResponseEntity<List<WorkerResponse>> writeWorker(@RequestPart(value = "nationality_code") String nationalityCode,
-                                                                               @RequestPart(value = "workers") List<WorkerRequest> workerRequests) {
-        return ResponseEntity.ok(workerService.saveWorker(nationalityCode, workerRequests));
+    @PostMapping("/workers")
+    public ResponseEntity<List<WorkerResponse>> registerWorkers(@RequestBody List<WorkerRequest> workerRequests) {
+        return ResponseEntity.ok(workerService.saveWorkers(workerRequests));
     }
 
-    @PatchMapping("/worker")
-    public ResponseEntity<List<WorkerResponse>> editWorker(@RequestPart(value = "nationality_code") String nationalityCode,
-                                                                               @RequestPart(value = "workers") List<WorkerRequest> workerRequests) {
-        return ResponseEntity.ok(workerService.saveWorker(nationalityCode, workerRequests));
+    @PatchMapping("/workers")
+    public ResponseEntity<List<WorkerResponse>> editWorkers(@RequestBody List<WorkerRequest> workerRequests) {
+        return ResponseEntity.ok(workerService.saveWorkers(workerRequests));
     }
 
-    @DeleteMapping("/worker")
-    public void deleteWorker(@RequestBody List<WorkerRequest> workerRequests) {
-        workerService.deleteWorker(workerRequests);
+    @DeleteMapping("/workers")
+    public void deleteWorkers(@RequestBody List<WorkerRequest> workerRequests) {
+        workerService.deleteWorkers(workerRequests);
     }
-
-
 
 }

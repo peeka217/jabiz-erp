@@ -1,8 +1,10 @@
 package com.jabiz.erp.member.entry;
 
 import com.jabiz.erp.member.controller.dto.AccessToken;
+import com.jabiz.erp.member.domain.entity.Member;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.text.ParseException;
@@ -32,7 +35,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public AccessToken generateTokenDto(String id, String accessible) throws ParseException {
+    public AccessToken generateAccessToken(Member member, String accessible) throws ParseException {
 
         ZonedDateTime seoulDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -41,9 +44,10 @@ public class TokenProvider {
         String refreshTokenExpiresIn = seoulDateTime.plusDays(7).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         String accessToken = Jwts.builder()
-                .setSubject(id)
+                .setSubject((member.getId()) + "&"
+                        + member.getRealName())
                 .claim("auth", "ROLE_USER")
-                .claim("accesible", accessible)
+                .claim("accessible", accessible)
                 .setExpiration(dateFormat.parse(accessTokenExpiresIn))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -89,16 +93,24 @@ public class TokenProvider {
         } catch (IllegalArgumentException e) {
         }
 
-
         return false;
     }
 
-    private Claims parseClaims(String accessToken) {
+    public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String resolveToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_TYPE + " ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 }
