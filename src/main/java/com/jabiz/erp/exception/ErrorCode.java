@@ -15,9 +15,13 @@ public enum ErrorCode {
      * 4XX
      */
     UNAUTHENTICATED_ACCESS(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED_ACCESS", "인증이 필요한 요청입니다."),
-    NOT_FOUND(HttpStatus.NOT_FOUND, "NOT_FOUND", "요청한 정보를 찾을 수 없습니다."),
-    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "INVALID_TOKEN", "유효하지 않은 토큰입니다."),
-    DUPLICATION_ERROR(HttpStatus.CONFLICT, "DUPLICATION_ERROR", "중복이 허용되지 않는 파라미터입니다." );
+
+    UNAUTHORIZED_ACCESS(HttpStatus.FORBIDDEN, "UNAUTHORIZED_ACCESS", "접근권한이 없습니다."),
+
+    STATE_CONFLICT(HttpStatus.CONFLICT, "STATE_CONFLICT", "클라이언트의 요청이 서버의 상태에 반합니다." ),
+
+    INVALID_DATA(HttpStatus.BAD_REQUEST, "INVALID_DATA", "유효하지 않은 요청 데이터 입니다.");
+
 
 
     private final HttpStatus code;

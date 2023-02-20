@@ -40,8 +40,8 @@ public class TokenProvider {
         ZonedDateTime seoulDateTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String issuedAt = seoulDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String accessTokenExpiresIn = seoulDateTime.plusHours(3).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String refreshTokenExpiresIn = seoulDateTime.plusDays(7).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String accessTokenExpiresIn = seoulDateTime.plusHours(8).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String refreshTokenExpiresIn = seoulDateTime.plusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         String accessToken = Jwts.builder()
                 .setSubject((member.getId()) + "&"

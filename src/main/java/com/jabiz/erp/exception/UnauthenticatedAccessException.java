@@ -8,7 +8,7 @@ public class UnauthenticatedAccessException extends RuntimeException {
     private ErrorCode errorCode;
 
     public UnauthenticatedAccessException() {
-        this.errorCode = ErrorCode.NOT_FOUND;
+        this.errorCode = ErrorCode.UNAUTHENTICATED_ACCESS;
     }
 
 }

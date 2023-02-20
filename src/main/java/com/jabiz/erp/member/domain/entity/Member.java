@@ -20,8 +20,9 @@ public class Member {
     private String realName;
     private String nickname;
 
-    @Enumerated(value = EnumType.STRING)
-    private Authority authority;
+    private String authority;
+
+    private String accessible;
 
     private String email;
     private String passwordDigest;
@@ -31,11 +32,13 @@ public class Member {
     private String marketingYn;
 
     @Builder
-    public Member(String signupCode,
+    public Member(Long id,
+                  String signupCode,
                   String realName, String nickname, String email, String passwordDigest,
-                  Authority authority,
+                  String authority,
                   String birthday, String gender,
                   String marketingYn) {
+        this.id = id;
         this.signupCode = signupCode;
         this.realName = realName;
         this.nickname = nickname;

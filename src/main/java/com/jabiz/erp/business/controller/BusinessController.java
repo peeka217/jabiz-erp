@@ -19,8 +19,8 @@ public class BusinessController {
 
     private final BusinessService businessService;
 
-    @GetMapping("/business/records/agent")
-    public ResponseEntity<List<BusinessRecordResponse>> lookUpBusinessRecordsForAgent(
+    @GetMapping("/business/registration/records")
+    public ResponseEntity<List<BusinessRecordResponse>> lookUpBusinessRecordsForRegistration(
             @RequestParam(value = "site_code", required = false) String siteCode,
             @RequestParam(value = "state_code", required = false) String stateCode,
             @RequestParam(value = "time_stamp_from", required = false) LocalDate timeStampFrom,
@@ -40,8 +40,8 @@ public class BusinessController {
                         .build(), pagingNumber, pagingSize));
     }
 
-    @GetMapping("/business/records/approver")
-    public ResponseEntity<List<BusinessRecordResponse>> lookUpBusinessRecordsForApprover(
+    @GetMapping("/business/process/records")
+    public ResponseEntity<List<BusinessRecordResponse>> lookUpBusinessRecordsForProcess(
             @RequestParam(value = "site_code", required = false) String siteCode,
             @RequestParam(value = "state_code", required = false) String stateCode,
             @RequestParam(value = "time_stamp_from", required = false) LocalDate timeStampFrom,
@@ -61,17 +61,17 @@ public class BusinessController {
                         .build(), pagingNumber, pagingSize));
     }
 
-    @PostMapping("/business/records")
+    @PostMapping("/business/registration/records")
     public ResponseEntity<List<BusinessRecordResponse>> registerBusinessRecords(@RequestBody List<BusinessRecordRequest> businessRecordRequests) {
         return ResponseEntity.ok(businessService.registerBusinessRecord(businessRecordRequests));
     }
 
-    @PatchMapping("/business/records/agent")
+    @PatchMapping("/business/registration/records")
     public void editBusinessRecords(@RequestBody List<BusinessRecordRequest> businessRecordRequests) {
         businessService.editBusinessRecords(businessRecordRequests);
     }
 
-    @DeleteMapping("/business/records/agent")
+    @DeleteMapping("/business/registration/records")
     public void deleteBusinessRecords(@RequestBody List<BusinessRecordRequest> businessRecordRequests) {
         businessService.deleteBusinessRecord(businessRecordRequests);
     }

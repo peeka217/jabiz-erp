@@ -70,8 +70,7 @@ public class BusinessRecordRepositoryImpl implements BusinessRecordRepositoryCus
         updateBuilder
                 .where(
                         businessRecord.id.eq(businessRecordEntity.getId())
-                )
-                .execute();
+                ).execute();
 
         em.clear();
         em.flush();

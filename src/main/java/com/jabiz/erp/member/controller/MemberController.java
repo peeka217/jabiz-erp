@@ -1,5 +1,7 @@
 package com.jabiz.erp.member.controller;
 
+import com.jabiz.erp.member.controller.dto.MemberRequest;
+import com.jabiz.erp.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,9 +10,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/member")
 public class MemberController {
 
-//    private final MemberService memberService;
+    private final MemberService memberService;
 
 
+    @PatchMapping("/password")
+    public void changeMemberPassword(@RequestBody MemberRequest memberRequest) {
+        memberService.changeMemberPassword(memberRequest);
+    }
 
     @PostMapping("/signup")
     public String signup() {

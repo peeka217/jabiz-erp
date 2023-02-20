@@ -22,6 +22,7 @@ public class MemberRequest {
     private String nickname;
     private String email;
     private String password;
+    private String newPassword;
     private String birthday;
     private String gender;
 
@@ -33,7 +34,7 @@ public class MemberRequest {
                 .nickname(this.nickname)
                 .email(this.email)
                 .passwordDigest(passwordEncoder.encode(this.password))
-                .authority(Authority.ROLE_USER)
+                .authority("ROLE_USER")
                 .birthday(this.birthday)
                 .gender(this.gender)
                 .marketingYn(this.marketingYn)

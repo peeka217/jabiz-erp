@@ -19,8 +19,9 @@ public class AccessTokenResponse {
     private String grantType;
     private String accessToken;
     private String refreshToken;
-
     private String accessTokenExpiresIn;
+
+    private String accessible;
 
     public static AccessTokenResponse of(AccessToken tokenDto, Member member) {
         return AccessTokenResponse.builder()
@@ -31,13 +32,15 @@ public class AccessTokenResponse {
                 .accessToken(tokenDto.getAccessToken())
                 .refreshToken(tokenDto.getRefreshToken())
                 .accessTokenExpiresIn(tokenDto.getRefreshToken())
+                .accessible(member.getAccessible())
                 .build();
     }
 
     @Builder
     public AccessTokenResponse(Long id,
                                String realName, String nickname,
-                               String grantType, String accessToken, String refreshToken, String accessTokenExpiresIn) {
+                               String grantType, String accessToken, String refreshToken, String accessTokenExpiresIn,
+                               String accessible) {
         this.id = id;
         this.realName = realName;
         this.nickname = nickname;
@@ -45,6 +48,7 @@ public class AccessTokenResponse {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.accessTokenExpiresIn = accessTokenExpiresIn;
+        this.accessible = accessible;
     }
 
 }

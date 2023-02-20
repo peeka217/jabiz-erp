@@ -15,24 +15,31 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = UnauthenticatedAccessException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorizedAccessException(Exception e) {
+    public ResponseEntity<ErrorResponse> handleUnauthenticatedAccessException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.UNAUTHENTICATED_ACCESS);
 
         return new ResponseEntity<>(errorResponse, ErrorCode.UNAUTHENTICATED_ACCESS.getCode());
     }
 
-    @ExceptionHandler(value = NotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(Exception e) {
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.NOT_FOUND);
+    @ExceptionHandler(value = UnauthorizedAccessException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedAccessException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.UNAUTHORIZED_ACCESS);
 
-        return new ResponseEntity<>(errorResponse, ErrorCode.NOT_FOUND.getCode());
+        return new ResponseEntity<>(errorResponse, ErrorCode.UNAUTHORIZED_ACCESS.getCode());
     }
 
-    @ExceptionHandler(value = InvalidTokenException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidTokenException(Exception e) {
-        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_TOKEN);
+    @ExceptionHandler(value = StateConflictException.class)
+    public ResponseEntity<ErrorResponse> handleStateConflictException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.STATE_CONFLICT);
 
-        return new ResponseEntity<>(errorResponse, ErrorCode.INVALID_TOKEN.getCode());
+        return new ResponseEntity<>(errorResponse, ErrorCode.STATE_CONFLICT.getCode());
+    }
+
+    @ExceptionHandler(value = InvalidDataException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidDataException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_DATA);
+
+        return new ResponseEntity<>(errorResponse, ErrorCode.INVALID_DATA.getCode());
     }
 
 }
