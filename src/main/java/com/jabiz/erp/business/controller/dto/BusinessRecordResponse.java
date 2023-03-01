@@ -2,6 +2,8 @@ package com.jabiz.erp.business.controller.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
+import com.jabiz.erp.business.domain.constant.BusinessPartCode;
 import com.jabiz.erp.business.domain.entity.BusinessRecord;
 import lombok.Builder;
 import lombok.Data;
@@ -17,14 +19,14 @@ public class BusinessRecordResponse {
 
     private Long id;
 
-    private String stateCode;
-    private String state;
+    private BusinessStateCode businessStateCode;
+    private String businessStateName;
 
-    private String siteCode;
-    private String site;
-    private LocalDate timeStamp;
-    private String timeSlotCode;
-    private String timeSlot;
+    private Long siteId;
+    private String siteName;
+    private LocalDate workedAt;
+    private BusinessPartCode businessPartCode;
+    private String businessPartName;
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer basicTime;
@@ -35,13 +37,11 @@ public class BusinessRecordResponse {
     private String commission;
     private String paymentAmount;
 
-
-
     private Long workerId;
-    private String realName;
+    private String workerRealName;
     private String residentRegistrationNumber;
-    private String bank;
     private String bankCode;
+    private String bankName;
     private String accountNumber;
     private String accountHolder;
 
@@ -52,24 +52,18 @@ public class BusinessRecordResponse {
     private Long approverId;
     private String approverName;
 
-
-    private String salesAmount;
-    private String vatAmount;
-    private String depositAmount;
-    private String netProfitAmount;
-
     public static BusinessRecordResponse of(BusinessRecord businessRecord) {
         return BusinessRecordResponse.builder()
                 .id(businessRecord.getId())
 
-                .stateCode(businessRecord.getStateCode())
-                .state(businessRecord.getState())
+                .businessStateCode(businessRecord.getBusinessStateCode())
+                .businessStateName(businessRecord.getBusinessStateName())
 
-                .siteCode(businessRecord.getSiteCode())
-                .site(businessRecord.getSite())
-                .timeStamp(businessRecord.getTimeStamp())
-                .timeSlotCode(businessRecord.getTimeSlotCode())
-                .timeSlot(businessRecord.getTimeSlot())
+                .siteId(businessRecord.getSiteId())
+                .siteName(businessRecord.getSiteName())
+                .workedAt(businessRecord.getWorkedAt())
+                .businessPartCode(businessRecord.getBusinessPartCode())
+                .businessPartName(businessRecord.getBusinessPartName())
                 .startTime(businessRecord.getStartTime())
                 .endTime(businessRecord.getEndTime())
                 .basicTime(businessRecord.getBasicTime())
@@ -81,10 +75,10 @@ public class BusinessRecordResponse {
                 .paymentAmount(businessRecord.getPaymentAmount())
 
                 .workerId(businessRecord.getWorkerId())
-                .realName(businessRecord.getRealName())
+                .workerRealName(businessRecord.getWorkerRealName())
                 .residentRegistrationNumber(businessRecord.getResidentRegistrationNumber())
+                .bankName(businessRecord.getBankName())
                 .bankCode(businessRecord.getBankCode())
-                .bank(businessRecord.getBank())
                 .accountNumber(businessRecord.getAccountNumber())
                 .accountHolder(businessRecord.getAccountHolder())
 
@@ -95,40 +89,34 @@ public class BusinessRecordResponse {
                 .approverId(businessRecord.getApproverId())
                 .approverName(businessRecord.getApproverName())
 
-                .vatAmount(businessRecord.getVatAmount())
-                .depositAmount(businessRecord.getDepositAmount())
-                .netProfitAmount(businessRecord.getNetProfitAmount())
-
                 .build();
     }
 
     @Builder
     public BusinessRecordResponse(Long id,
-                                  String stateCode, String state,
+                                  BusinessStateCode businessStateCode, String businessStateName,
 
-                                  String siteCode, String site, LocalDate timeStamp, String timeSlot, String timeSlotCode,
+                                  Long siteId, String siteName, LocalDate workedAt, BusinessPartCode businessPartCode, String businessPartName,
                                   LocalTime startTime, LocalTime endTime, Integer basicTime, Integer overtime,
 
                                   String basicSalary, String extraSalary, String commission, String paymentAmount,
 
-                                  Long workerId, String realName, String residentRegistrationNumber,
-                                  String bankCode, String bank, String accountNumber, String accountHolder,
+                                  Long workerId, String workerRealName, String residentRegistrationNumber,
+                                  String bankCode, String bankName, String accountNumber, String accountHolder,
 
                                   String note,
 
-                                  Long agentId, String agentName, Long approverId, String approverName,
-
-                                  String salesAmount, String vatAmount, String depositAmount,  String netProfitAmount) {
+                                  Long agentId, String agentName, Long approverId, String approverName) {
         this.id = id;
 
-        this.stateCode = stateCode;
-        this.state = state;
+        this.businessStateCode = businessStateCode;
+        this.businessStateName = businessStateName;
 
-        this.siteCode = siteCode;
-        this.site = site;
-        this.timeStamp = timeStamp;
-        this.timeSlotCode = timeSlotCode;
-        this.timeSlot = timeSlot;
+        this.siteId = siteId;
+        this.siteName = siteName;
+        this.workedAt = workedAt;
+        this.businessPartCode = businessPartCode;
+        this.businessPartName = businessPartName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.basicTime = basicTime;
@@ -140,10 +128,10 @@ public class BusinessRecordResponse {
         this.paymentAmount = paymentAmount;
 
         this.workerId = workerId;
-        this.realName = realName;
+        this.workerRealName = workerRealName;
         this.residentRegistrationNumber = residentRegistrationNumber;
         this.bankCode = bankCode;
-        this.bank = bank;
+        this.bankName = bankName;
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
 
@@ -153,11 +141,5 @@ public class BusinessRecordResponse {
         this.agentName = agentName;
         this.approverId = approverId;
         this.approverName = approverName;
-
-
-        this.salesAmount = salesAmount;
-        this.vatAmount = vatAmount;
-        this.depositAmount = depositAmount;
-        this.netProfitAmount = netProfitAmount;
     }
 }

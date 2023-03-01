@@ -1,6 +1,8 @@
 package com.jabiz.erp.business.infra;
 
 import com.jabiz.erp.business.controller.dto.BusinessRecordSearchCriteria;
+import com.jabiz.erp.business.domain.constant.BusinessPartCode;
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
 import com.jabiz.erp.business.domain.entity.BusinessRecord;
 import com.querydsl.core.dml.UpdateClause;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -10,6 +12,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -26,19 +29,20 @@ public class BusinessRecordRepositoryImpl implements BusinessRecordRepositoryCus
     private final EntityManager em;
 
     @Override
-    public Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria, Pageable pageable) {
+    public Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria) {
+        Pageable pageable = PageRequest.of(searchCriteria.getPagingNumber(), searchCriteria.getPagingSize());
+
         List<BusinessRecord> businessRecords = queryFactory
                 .selectFrom(businessRecord)
                 .where(
-                        this.eqAgentId(searchCriteria.getAgentId()),
-                        this.eqSiteCode(searchCriteria.getSiteCode()),
-                        this.inStatesCodes(searchCriteria.getStateCodes()),
-                        this.betweenTimeStamp(searchCriteria.getTimeStampFrom(), searchCriteria.getTimeStampTo()),
-                        this.eqTimeSlotCode(searchCriteria.getTimeSlotCode()),
+                        this.equalsSiteId(searchCriteria.getSiteId()),
+                        this.inBuisnessStatesCodes(searchCriteria.getBusinessStateCodes()),
+                        this.betweenWorkedAt(searchCriteria.getFromWorkedAt(), searchCriteria.getToWorkedAt()),
+                        this.equalsBbusinessPartCode(searchCriteria.getBusinessPartCode()),
                         this.containsAccountNumber(searchCriteria.getAccountNumber()),
-                        this.containsRealName(searchCriteria.getRealName())
+                        this.containsWorkerRealName(searchCriteria.getWorkerRealName())
                 )
-                .orderBy(businessRecord.id.desc(), businessRecord.stateCode.asc(), businessRecord.siteCode.desc())
+                .orderBy(businessRecord.id.desc(), businessRecord.businessStateCode.asc(), businessRecord.siteId.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -47,66 +51,64 @@ public class BusinessRecordRepositoryImpl implements BusinessRecordRepositoryCus
 
     }
 
-    @Override
-    public void updateBusinessRecordForAgent(BusinessRecord businessRecordEntity) {
-        UpdateClause<JPAUpdateClause> updateBuilder = new JPAUpdateClause(em, businessRecord);
-
-        if (businessRecordEntity.getSiteCode() != null)
-            updateBuilder.set(businessRecord.siteCode, businessRecordEntity.getSiteCode());
-        if (businessRecordEntity.getSite() != null)
-            updateBuilder.set(businessRecord.site, businessRecordEntity.getSite());
-        if (businessRecordEntity.getTimeStamp() != null)
-            updateBuilder.set(businessRecord.timeStamp, businessRecordEntity.getTimeStamp());
-        if (businessRecordEntity.getTimeSlotCode() != null)
-            updateBuilder.set(businessRecord.timeSlotCode, businessRecordEntity.getTimeSlotCode());
-        if (businessRecordEntity.getTimeSlot() != null)
-            updateBuilder.set(businessRecord.timeSlot, businessRecordEntity.getTimeSlot());
-
-        if (businessRecordEntity.getRealName() != null)
-            updateBuilder.set(businessRecord.realName, businessRecordEntity.getRealName());
-        if (businessRecordEntity.getResidentRegistrationNumber() != null)
-            updateBuilder.set(businessRecord.residentRegistrationNumber, businessRecordEntity.getResidentRegistrationNumber());
-
-        updateBuilder
-                .where(
-                        businessRecord.id.eq(businessRecordEntity.getId())
-                ).execute();
-
-        em.clear();
-        em.flush();
-    }
+//    @Override
+//    public void updateBusinessRecordForAgent(BusinessRecord businessRecordEntity) {
+//        UpdateClause<JPAUpdateClause> updateBuilder = new JPAUpdateClause(em, businessRecord);
+//
+//        if (businessRecordEntity.getSiteCode() != null)
+//            updateBuilder.set(businessRecord.siteCode, businessRecordEntity.getSiteCode());
+//        if (businessRecordEntity.getSite() != null)
+//            updateBuilder.set(businessRecord.site, businessRecordEntity.getSite());
+//        if (businessRecordEntity.getTimeStamp() != null)
+//            updateBuilder.set(businessRecord.timeStamp, businessRecordEntity.getTimeStamp());
+//        if (businessRecordEntity.getTimeSlotCode() != null)
+//            updateBuilder.set(businessRecord.timeSlotCode, businessRecordEntity.getTimeSlotCode());
+//        if (businessRecordEntity.getTimeSlot() != null)
+//            updateBuilder.set(businessRecord.timeSlot, businessRecordEntity.getTimeSlot());
+//
+//        if (businessRecordEntity.getRealName() != null)
+//            updateBuilder.set(businessRecord.realName, businessRecordEntity.getRealName());
+//        if (businessRecordEntity.getResidentRegistrationNumber() != null)
+//            updateBuilder.set(businessRecord.residentRegistrationNumber, businessRecordEntity.getResidentRegistrationNumber());
+//
+//        updateBuilder
+//                .where(
+//                        businessRecord.id.eq(businessRecordEntity.getId())
+//                ).execute();
+//
+//        em.clear();
+//        em.flush();
+//    }
 
 
     private BooleanExpression eqAgentId(Long agentId) {
         return agentId == null ? null : businessRecord.agentId.eq(agentId);
     }
 
-    private BooleanExpression eqSiteCode(String siteCode) {
-        return siteCode == null ? null : businessRecord.siteCode.eq(siteCode);
+    private BooleanExpression equalsSiteId(Long siteId) {
+        return siteId == null ? null : businessRecord.siteId.eq(siteId);
     }
 
-    private BooleanExpression inStatesCodes(List<String> stateCodes) {
-        return stateCodes == null ? null : businessRecord.stateCode.in(stateCodes);
+    private BooleanExpression inBuisnessStatesCodes(List<BusinessStateCode> businessStateCodes) {
+        return businessStateCodes == null ? null : businessRecord.businessStateCode.in(businessStateCodes);
     }
 
-    private BooleanExpression betweenTimeStamp(LocalDate timeStampFrom, LocalDate timeStampTo) {
-        if (timeStampFrom == null)
+    private BooleanExpression betweenWorkedAt(LocalDate fromWorkedAt, LocalDate toWorkedAt) {
+        if (fromWorkedAt == null)
             return null;
-        return businessRecord.timeStamp.between(timeStampFrom, timeStampTo);
+        return businessRecord.workedAt.between(fromWorkedAt, toWorkedAt);
     }
 
-    private BooleanExpression eqTimeSlotCode(String timeSlotCode) {
-        return timeSlotCode == null ? null : businessRecord.timeSlotCode.eq(timeSlotCode);
+    private BooleanExpression equalsBbusinessPartCode(BusinessPartCode businessPartCode) {
+        return businessPartCode == null ? null : businessRecord.businessPartCode.eq(businessPartCode);
     }
 
     private BooleanExpression containsAccountNumber(String accountNumber) {
         return accountNumber == null ? null : businessRecord.accountNumber.contains(accountNumber);
     }
 
-    private BooleanExpression containsRealName(String realName){
-        return realName == null ? null : businessRecord.realName.contains(realName);
+    private BooleanExpression containsWorkerRealName(String workerRealName){
+        return workerRealName == null ? null : businessRecord.workerRealName.contains(workerRealName);
     }
-
-
 
 }

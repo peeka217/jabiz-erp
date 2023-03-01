@@ -23,11 +23,10 @@ public class BusinessService {
 
     private final BusinessRecordRepository businessRecordRepository;
 
-    public List<BusinessRecordResponse> lookUpBusinessRecordsForAgent(BusinessRecordSearchCriteria searchCriteria,
-                                                                      int pagingNumber, int pagingSize) {
+    public List<BusinessRecordResponse> lookUpBusinessRecordsForRegistration(BusinessRecordSearchCriteria searchCriteria) {
         List<BusinessRecord> businessRecords = businessRecordRepository
-                .findWithSearchCriteria(searchCriteria.searchLimitedByAgentSession(),
-                        PageRequest.of(pagingNumber, pagingSize)).getContent();
+                .findWithSearchCriteria(searchCriteria)
+                .getContent();
 
         List<BusinessRecordResponse> businessRecordResponses = new ArrayList<>();
         businessRecords.forEach(businessRecord -> {
@@ -37,48 +36,48 @@ public class BusinessService {
         return businessRecordResponses;
     }
 
-    public List<BusinessRecordResponse> lookUpBusinessRecordsForApprover(BusinessRecordSearchCriteria searchCriteria,
-                                                                         int pagingNumber, int pagingSize) {
-        List<BusinessRecord> businessRecords = businessRecordRepository
-                .findWithSearchCriteria(searchCriteria.getStateCodes() == null
-                                ? searchCriteria.searchLimitedByStateCodes(Arrays.asList("BS01", "BS02")) : searchCriteria,
-                        PageRequest.of(pagingNumber, pagingSize)).getContent();
-
-        List<BusinessRecordResponse> businessRecordResponses = new ArrayList<>();
-        businessRecords.forEach(businessRecord -> {
-            businessRecordResponses.add(BusinessRecordResponse.of(businessRecord));
-        });
-
-        return businessRecordResponses;
-    }
-
-    public List<BusinessRecordResponse> registerBusinessRecord(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(businessRecordRequest -> {
-            BusinessRecord businessRecord = businessRecordRequest
-                    .toBusinessRecordForRegistration(businessRecordRequest.toBusinessRecord());
-            businessRecordRepository.save(businessRecord);
-        });
-
-        return this.lookUpBusinessRecordsForAgent(
-                BusinessRecordSearchCriteria.builder()
-                        .siteCode(businessRecordRequests.get(0).getSiteCode()).build(),
-                0, DEFAULT_PAGING_SIZE);
-    }
-
-    @Transactional
-    public void editBusinessRecords(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(businessRecordRequest -> {
-            BusinessRecord businessRecord = businessRecordRequest.toBusinessRecord();
-            businessRecord.setUpdatedBy(SecurityUtil.getMemberId());
-            businessRecordRepository.save(businessRecord);
-        });
-    }
-
-    public void deleteBusinessRecord(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(businessRecordRequest -> {
-            businessRecordRepository.delete(businessRecordRequest.toBusinessRecord());
-        });
-    }
+//    public List<BusinessRecordResponse> lookUpBusinessRecordsForApprover(BusinessRecordSearchCriteria searchCriteria,
+//                                                                         int pagingNumber, int pagingSize) {
+//        List<BusinessRecord> businessRecords = businessRecordRepository
+//                .findWithSearchCriteria(searchCriteria.getStateCodes() == null
+//                                ? searchCriteria.searchLimitedByStateCodes(Arrays.asList("BS01", "BS02")) : searchCriteria,
+//                        PageRequest.of(pagingNumber, pagingSize)).getContent();
+//
+//        List<BusinessRecordResponse> businessRecordResponses = new ArrayList<>();
+//        businessRecords.forEach(businessRecord -> {
+//            businessRecordResponses.add(BusinessRecordResponse.of(businessRecord));
+//        });
+//
+//        return businessRecordResponses;
+//    }
+//
+//    public List<BusinessRecordResponse> registerBusinessRecord(List<BusinessRecordRequest> businessRecordRequests) {
+//        businessRecordRequests.forEach(businessRecordRequest -> {
+//            BusinessRecord businessRecord = businessRecordRequest
+//                    .toBusinessRecordForRegistration(businessRecordRequest.toBusinessRecord());
+//            businessRecordRepository.save(businessRecord);
+//        });
+//
+//        return this.lookUpBusinessRecordsForAgent(
+//                BusinessRecordSearchCriteria.builder()
+//                        .siteCode(businessRecordRequests.get(0).getSiteCode()).build(),
+//                0, DEFAULT_PAGING_SIZE);
+//    }
+//
+//    @Transactional
+//    public void editBusinessRecords(List<BusinessRecordRequest> businessRecordRequests) {
+//        businessRecordRequests.forEach(businessRecordRequest -> {
+//            BusinessRecord businessRecord = businessRecordRequest.toBusinessRecord();
+//            businessRecord.setUpdatedBy(SecurityUtil.getMemberId());
+//            businessRecordRepository.save(businessRecord);
+//        });
+//    }
+//
+//    public void deleteBusinessRecord(List<BusinessRecordRequest> businessRecordRequests) {
+//        businessRecordRequests.forEach(businessRecordRequest -> {
+//            businessRecordRepository.delete(businessRecordRequest.toBusinessRecord());
+//        });
+//    }
 
 
 }

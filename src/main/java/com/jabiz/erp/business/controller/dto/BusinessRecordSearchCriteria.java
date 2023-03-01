@@ -1,5 +1,7 @@
 package com.jabiz.erp.business.controller.dto;
 
+import com.jabiz.erp.business.domain.constant.BusinessPartCode;
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
 import com.jabiz.erp.util.SecurityUtil;
 import lombok.Builder;
 import lombok.Data;
@@ -13,42 +15,37 @@ import java.util.List;
 @NoArgsConstructor
 public class BusinessRecordSearchCriteria {
 
-
-    private Long agentId;
-    private List<String> stateCodes;
-    private String siteCode;
-    private LocalDate timeStampFrom;
-    private LocalDate timeStampTo;
-    private String timeSlotCode;
+    private List<BusinessStateCode> businessStateCodes;
+    private Long siteId;
+    private LocalDate fromWorkedAt;
+    private LocalDate toWorkedAt;
+    private BusinessPartCode businessPartCode;
     private String accountNumber;
-    private String realName;
+    private String workerRealName;
 
     private int pagingNumber;
     private int pagingSize;
 
-    public BusinessRecordSearchCriteria searchLimitedByAgentSession() {
-        this.agentId = SecurityUtil.getMemberId();
-        return this;
-    }
 
-    public BusinessRecordSearchCriteria searchLimitedByStateCodes(List<String> stateCodes) {
-        this.stateCodes = stateCodes;
+    public BusinessRecordSearchCriteria searchLimitedByStateCodes(List<BusinessStateCode> businessStateCodes) {
+        this.businessStateCodes = businessStateCodes;
         return this;
     }
 
     @Builder
-    public BusinessRecordSearchCriteria(Long agentId, List<String> stateCodes, String siteCode,
-                                        LocalDate timeStampFrom, LocalDate timeStampTo, String timeSlotCode,
-                                        String accountNumber, String realName,
+    public BusinessRecordSearchCriteria(List<BusinessStateCode> businessStateCodes,
+                                        Long siteId,
+                                        LocalDate fromWorkedAt, LocalDate toWorkedAt, BusinessPartCode businessPartCode,
+                                        String accountNumber, String workerRealName,
                                         int pagingNumber, int pagingSize) {
-        this.agentId = agentId;
-        this.stateCodes = stateCodes;
-        this.siteCode = siteCode;
-        this.timeStampFrom = timeStampFrom;
-        this.timeStampTo = timeStampTo;
-        this.timeSlotCode = timeSlotCode;
+        this.businessStateCodes = businessStateCodes;
+        this.siteId = siteId;
+        this.fromWorkedAt = fromWorkedAt;
+        this.toWorkedAt = toWorkedAt;
+        this.businessPartCode = businessPartCode;
         this.accountNumber = accountNumber;
-        this.realName = realName;
+        this.workerRealName = workerRealName;
+
         this.pagingNumber = pagingNumber;
         this.pagingSize = pagingSize;
     }

@@ -1,10 +1,9 @@
 package com.jabiz.erp.business.domain.entity;
 
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
+import com.jabiz.erp.business.domain.constant.BusinessPartCode;
 import com.jabiz.erp.primitive.entity.PrimitiveEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -21,14 +20,17 @@ public class BusinessRecord extends PrimitiveEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String stateCode;
-    private String state;
+    @Enumerated(value = EnumType.STRING)
+    private BusinessStateCode businessStateCode;
+    private String businessStateName;
 
-    private String siteCode;
-    private String site;
-    private LocalDate timeStamp;
-    private String timeSlotCode;
-    private String timeSlot;
+    private Long siteId;
+    private String siteName;
+    private LocalDate workedAt;
+
+    @Enumerated(value = EnumType.STRING)
+    private BusinessPartCode businessPartCode;
+    private String businessPartName;
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer basicTime;
@@ -40,10 +42,10 @@ public class BusinessRecord extends PrimitiveEntity {
     private String paymentAmount;
 
     private Long workerId;
-    private String realName;
+    private String workerRealName;
     private String residentRegistrationNumber;
-    private String bank;
     private String bankCode;
+    private String bankName;
     private String accountNumber;
     private String accountHolder;
 
@@ -54,41 +56,31 @@ public class BusinessRecord extends PrimitiveEntity {
     private Long approverId;
     private String approverName;
 
-
-    private String salesAmount;
-    private String vatAmount;
-    private String depositAmount;
-    private String netProfitAmount;
-
-
     @Builder
     public BusinessRecord(Long id,
-                          String stateCode, String state,
+                          BusinessStateCode businessStateCode, String businessStateName,
 
-                          String siteCode, String site, LocalDate timeStamp, String timeSlotCode, String timeSlot,
+                          Long siteId, String siteName, LocalDate workedAt, BusinessPartCode businessPartCode, String businessPartName,
                           LocalTime startTime, LocalTime endTime, Integer basicTime, Integer overtime,
 
                           String basicSalary, String extraSalary, String commission, String paymentAmount,
 
-                          Long workerId, String realName, String residentRegistrationNumber,
-                          String bankCode, String bank, String accountNumber, String accountHolder,
+                          Long workerId, String workerRealName, String residentRegistrationNumber,
+                          String bankCode, String bankName, String accountNumber, String accountHolder,
 
                           String note,
 
-                          Long agentId, String agentName, Long approverId, String approverName,
-
-                          String salesAmount, String vatAmount, String depositAmount,  String netProfitAmount) {
-
+                          Long agentId, String agentName, Long approverId, String approverName) {
         this.id = id;
 
-        this.stateCode = stateCode;
-        this.state = state;
+        this.businessStateCode = businessStateCode;
+        this.businessStateName = businessStateName;
 
-        this.siteCode = siteCode;
-        this.site = site;
-        this.timeStamp = timeStamp;
-        this.timeSlotCode = timeSlotCode;
-        this.timeSlot = timeSlot;
+        this.siteId = siteId;
+        this.siteName = siteName;
+        this.workedAt = workedAt;
+        this.businessPartCode = businessPartCode;
+        this.businessPartName = businessPartName;
         this.startTime = startTime;
         this.endTime = endTime;
         this.basicTime = basicTime;
@@ -100,10 +92,10 @@ public class BusinessRecord extends PrimitiveEntity {
         this.paymentAmount = paymentAmount;
 
         this.workerId = workerId;
-        this.realName = realName;
+        this.workerRealName = workerRealName;
         this.residentRegistrationNumber = residentRegistrationNumber;
         this.bankCode = bankCode;
-        this.bank = bank;
+        this.bankName = bankName;
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
 
@@ -113,12 +105,6 @@ public class BusinessRecord extends PrimitiveEntity {
         this.agentName = agentName;
         this.approverId = approverId;
         this.approverName = approverName;
-
-
-        this.salesAmount = salesAmount;
-        this.vatAmount = vatAmount;
-        this.depositAmount = depositAmount;
-        this.netProfitAmount = netProfitAmount;
     }
 
 }

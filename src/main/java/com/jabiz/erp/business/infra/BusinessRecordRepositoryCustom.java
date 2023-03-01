@@ -10,9 +10,8 @@ import java.util.List;
 
 public interface BusinessRecordRepositoryCustom {
 
-    Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria, Pageable pageable);
+    Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria);
 
-    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
-
+//    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
 
 }

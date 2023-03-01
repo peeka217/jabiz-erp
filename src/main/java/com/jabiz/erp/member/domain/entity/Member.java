@@ -14,39 +14,52 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long erpId;
 
-    private String signupCode; // GN, GG,
+    private String signupCode;
+    private String memberStateCode;
+    private String memberCode;
+
+    private String authority;
+    private String accessible;
 
     private String realName;
     private String nickname;
-
-    private String authority;
-
-    private String accessible;
+    private String profileImage;
+    private String birthday;
+    private String gender;
 
     private String email;
     private String passwordDigest;
 
-    private String birthday;
-    private String gender;
     private String marketingYn;
 
     @Builder
-    public Member(Long id,
-                  String signupCode,
-                  String realName, String nickname, String email, String passwordDigest,
-                  String authority,
-                  String birthday, String gender,
+    public Member(Long id, Long erpId,
+                  String signupCode, String memberStateCode, String memberCode,
+                  String authority, String accessible,
+                  String realName, String nickname, String profileImage, String birthday, String gender,
+                  String email, String passwordDigest,
                   String marketingYn) {
         this.id = id;
+        this.erpId = erpId;
+
         this.signupCode = signupCode;
+        this.memberStateCode = memberStateCode;
+        this.memberCode = memberCode;
+
+        this.authority = authority;
+        this.accessible = accessible;
+
         this.realName = realName;
         this.nickname = nickname;
-        this.email = email;
-        this.passwordDigest = passwordDigest;
-        this.authority = authority;
+        this.profileImage = profileImage;
         this.birthday = birthday;
         this.gender = gender;
+
+        this.email = email;
+        this.passwordDigest = passwordDigest;
+
         this.marketingYn = marketingYn;
     }
 }

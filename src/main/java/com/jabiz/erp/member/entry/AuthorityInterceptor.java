@@ -19,7 +19,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             "business/registration", "0100",
             "business/process", "0200",
             "worker/information", "1100",
-            "report/asset", "3100"
+            "report/funds", "3100"
     );
     private final TokenProvider tokenProvider;
 

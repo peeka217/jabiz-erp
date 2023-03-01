@@ -14,7 +14,8 @@ import java.time.LocalDate;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class FundsRecord extends PrimitiveEntity {
+public class FundsDailyRecord extends PrimitiveEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,35 +26,37 @@ public class FundsRecord extends PrimitiveEntity {
     private String fundsCategoryName;
     private Long fundsId;
     private String fundsName;
-    private LocalDate tradedAt;
-    private String trader;
-    private String contents;
-    private String transactionCode;
-    private String transactionAmount;
 
+    private Long lastFundsReocrdId;
+    private String depositAmount;
+    private String withdrawalAmount;
+    private String balance;
+
+    private LocalDate tradedAt;
 
     @Builder
-    public FundsRecord(Long id,
-                       Long companyId, String companyName,
-                       String fundsCategoryCode, String fundsCategoryName, Long fundsId, String fundsName,
-                       LocalDate tradedAt, String trader, String contents,
-                       String transactionCode, String transactionAmount) {
-
+    public FundsDailyRecord(Long id,
+                            Long companyId, String companyName,
+                            String fundsCategoryCode, String fundsCategoryNAme, Long fundsId, String fundsName,
+                            Long lastFundsReocrdId,
+                            String depositAmount, String withdrawalAmount,String balance,
+                            LocalDate tradedAt) {
         this.id = id;
 
         this.companyId = companyId;
         this.companyName = companyName;
         this.fundsCategoryCode = fundsCategoryCode;
-        this.fundsCategoryName = fundsCategoryName;
+        this.fundsCategoryName = fundsCategoryNAme;
         this.fundsId = fundsId;
         this.fundsName = fundsName;
 
-        this.tradedAt = tradedAt;
-        this.trader = trader;
-        this.contents = contents;
+        this.lastFundsReocrdId = lastFundsReocrdId;
 
-        this.transactionCode = transactionCode;
-        this.transactionAmount = transactionAmount;
+        this.depositAmount = depositAmount;
+        this.withdrawalAmount = withdrawalAmount;
+        this.balance = balance;
+
+        this.tradedAt = tradedAt;
     }
 
 }

@@ -13,7 +13,7 @@ public interface BusinessRecordRepository extends JpaRepository<BusinessRecord, 
 
 
 
-    Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria, Pageable pageable);
-    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
+    Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria);
+//    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
 
 }

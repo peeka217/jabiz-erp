@@ -2,8 +2,9 @@ package com.jabiz.erp.business.controller.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
+import com.jabiz.erp.business.domain.constant.BusinessPartCode;
 import com.jabiz.erp.business.domain.entity.BusinessRecord;
-import com.jabiz.erp.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,14 +20,14 @@ public class BusinessRecordRequest {
 
     private Long id;
 
-    private String stateCode;
-    private String state;
+    private BusinessStateCode businessStateCode;
+    private String businessStateName;
 
-    private String siteCode;
-    private String site;
-    private LocalDate timeStamp;
-    private String timeSlotCode;
-    private String timeSlot;
+    private Long siteId;
+    private String siteName;
+    private LocalDate workedAt;
+    private BusinessPartCode businessPartCode;
+    private String businessPartName;
     private LocalTime startTime;
     private LocalTime endTime;
     private Integer basicTime;
@@ -38,10 +39,10 @@ public class BusinessRecordRequest {
     private String paymentAmount;
 
     private Long workerId;
-    private String realName;
+    private String workerRealName;
     private String residentRegistrationNumber;
-    private String bank;
     private String bankCode;
+    private String bankName;
     private String accountNumber;
     private String accountHolder;
 
@@ -61,14 +62,15 @@ public class BusinessRecordRequest {
     public BusinessRecord toBusinessRecord() {
         return BusinessRecord.builder()
                 .id(this.id)
-                .stateCode(this.stateCode)
-                .state(this.state)
 
-                .siteCode(this.siteCode)
-                .site(this.site)
-                .timeStamp(this.timeStamp)
-                .timeSlotCode(this.timeSlotCode)
-                .timeSlot(this.timeSlot)
+                .businessStateCode(this.businessStateCode)
+                .businessStateName(this.businessStateName)
+
+                .siteId(this.siteId)
+                .siteName(this.siteName)
+                .workedAt(this.workedAt)
+                .businessPartCode(this.businessPartCode)
+                .businessPartName(this.businessPartName)
                 .startTime(this.startTime)
                 .endTime(this.endTime)
                 .basicTime(this.basicTime)
@@ -80,10 +82,10 @@ public class BusinessRecordRequest {
                 .paymentAmount(this.paymentAmount)
 
                 .workerId(this.workerId)
-                .realName(this.realName)
+                .workerRealName(this.workerRealName)
                 .residentRegistrationNumber(this.residentRegistrationNumber)
-                .bank(this.bank)
                 .bankCode(this.bankCode)
+                .bankName(this.bankName)
                 .accountNumber(this.accountNumber)
                 .accountHolder(this.accountHolder)
 
@@ -93,20 +95,34 @@ public class BusinessRecordRequest {
                 .approverId(this.approverId)
                 .approverName(this.approverName)
 
-                .salesAmount(this.salesAmount)
-                .vatAmount(this.vatAmount)
-                .depositAmount(this.depositAmount)
-                .netProfitAmount(this.netProfitAmount)
                 .build();
     }
 
-    public BusinessRecord toBusinessRecordForRegistration(BusinessRecord businessRecord) {
-        businessRecord.setStateCode("RG");
-        businessRecord.setState("등록");
-        businessRecord.setAgentId(SecurityUtil.getMemberId());
-        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
-
-        return businessRecord;
-    }
+//    public BusinessRecord toSubmitStatus(BusinessRecord businessRecord) {
+//        businessRecord.setBusinessStateCode(BusinessStateCode.BZ02.getCode());
+//        businessRecord.setBusinessStateName(BusinessStateCode.BZ02.getName());
+//        businessRecord.setAgentId(SecurityUtil.getMemberId());
+//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
+//
+//        return businessRecord;
+//    }
+//
+//    public BusinessRecord toPaymentStatus(BusinessRecord businessRecord) {
+//        businessRecord.setBusinessStateCode(Busi);
+//        businessRecord.setBusinessStateName("지급");
+//        businessRecord.setAgentId(SecurityUtil.getMemberId());
+//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
+//
+//        return businessRecord;
+//    }
+//
+//    public BusinessRecord toHoldStatus(BusinessRecord businessRecord) {
+//        businessRecord.setBusinessStateCode("BZ04");
+//        businessRecord.setBusinessStateName("보류");
+//        businessRecord.setAgentId(SecurityUtil.getMemberId());
+//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
+//
+//        return businessRecord;
+//    }
 
 }
