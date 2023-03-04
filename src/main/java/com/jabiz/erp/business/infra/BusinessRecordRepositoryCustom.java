@@ -2,6 +2,7 @@ package com.jabiz.erp.business.infra;
 
 import com.jabiz.erp.business.controller.dto.BusinessRecordSearchCriteria;
 import com.jabiz.erp.business.domain.entity.BusinessRecord;
+import com.jabiz.erp.dashboard.domain.entity.Dashboard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +13,9 @@ public interface BusinessRecordRepositoryCustom {
 
     Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria);
 
-//    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
+    void updateBusinessState(BusinessRecord businessRecord);
+    void updateBusinessRecord(BusinessRecord businessRecord);
+
+    List<Dashboard> findBySiteIdInGroupByBusinessState(List<Long> siteIds);
 
 }

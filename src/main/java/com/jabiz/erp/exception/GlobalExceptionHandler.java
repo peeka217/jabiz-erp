@@ -28,6 +28,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, ErrorCode.UNAUTHORIZED_ACCESS.getCode());
     }
 
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(Exception e) {
+        ErrorResponse errorResponse = new ErrorResponse(ErrorCode.RESOURCE_NOT_FOUND);
+
+        return new ResponseEntity<>(errorResponse, ErrorCode.RESOURCE_NOT_FOUND.getCode());
+    }
+
     @ExceptionHandler(value = StateConflictException.class)
     public ResponseEntity<ErrorResponse> handleStateConflictException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(ErrorCode.STATE_CONFLICT);

@@ -59,6 +59,17 @@ public class BusinessRecordRequest {
     private String depositAmount;
     private String netProfitAmount;
 
+    private BusinessStateCode nextBusinessStateCode;
+
+    public BusinessRecord toBusinessRecordForBusinessStateChange() {
+        return BusinessRecord.builder()
+                .id(this.id)
+
+                .businessStateCode(this.nextBusinessStateCode)
+                .businessStateName(this.nextBusinessStateCode.getName())
+
+                .build();
+    }
     public BusinessRecord toBusinessRecord() {
         return BusinessRecord.builder()
                 .id(this.id)
@@ -97,32 +108,5 @@ public class BusinessRecordRequest {
 
                 .build();
     }
-
-//    public BusinessRecord toSubmitStatus(BusinessRecord businessRecord) {
-//        businessRecord.setBusinessStateCode(BusinessStateCode.BZ02.getCode());
-//        businessRecord.setBusinessStateName(BusinessStateCode.BZ02.getName());
-//        businessRecord.setAgentId(SecurityUtil.getMemberId());
-//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
-//
-//        return businessRecord;
-//    }
-//
-//    public BusinessRecord toPaymentStatus(BusinessRecord businessRecord) {
-//        businessRecord.setBusinessStateCode(Busi);
-//        businessRecord.setBusinessStateName("지급");
-//        businessRecord.setAgentId(SecurityUtil.getMemberId());
-//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
-//
-//        return businessRecord;
-//    }
-//
-//    public BusinessRecord toHoldStatus(BusinessRecord businessRecord) {
-//        businessRecord.setBusinessStateCode("BZ04");
-//        businessRecord.setBusinessStateName("보류");
-//        businessRecord.setAgentId(SecurityUtil.getMemberId());
-//        businessRecord.setAgentName(SecurityUtil.getMemberRealname());
-//
-//        return businessRecord;
-//    }
 
 }

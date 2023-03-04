@@ -33,6 +33,21 @@ public class WorkerController {
                 .build(), pagingNumber, pagingSize));
     }
 
+    @GetMapping("/workers/input")
+    public ResponseEntity<List<WorkerResponse>> lookUpWorkersToInput(
+            @RequestParam(value = "worker_id", required = false) Long workerId,
+            @RequestParam(value = "worker_name") String workerName,
+            @RequestParam(value = "paging_number") int pagingNumber,
+            @RequestParam(value = "paging_size") int pagingSize) {
+        return ResponseEntity.ok(workerService.lookUpWorkersToInput(
+                WorkerSearchCriteria.builder()
+                        .id(workerId)
+                        .realName(workerName)
+                        .pagingNumber(pagingNumber)
+                        .pagingSize(pagingSize)
+                        .build()));
+    }
+
     @PostMapping("/workers")
     public ResponseEntity<List<WorkerResponse>> registerWorkers(@RequestBody List<WorkerRequest> workerRequests) {
         return ResponseEntity.ok(workerService.saveWorkers(workerRequests));

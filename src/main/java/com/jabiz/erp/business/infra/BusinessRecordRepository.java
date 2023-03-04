@@ -11,9 +11,7 @@ import java.util.List;
 
 public interface BusinessRecordRepository extends JpaRepository<BusinessRecord, Long>, BusinessRecordRepositoryCustom {
 
-
-
     Page<BusinessRecord> findWithSearchCriteria(BusinessRecordSearchCriteria searchCriteria);
-//    void updateBusinessRecordForAgent(BusinessRecord businessRecord);
+
 
 }

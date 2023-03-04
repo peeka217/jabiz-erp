@@ -1,5 +1,6 @@
 package com.jabiz.erp.primitive.entity;
 
+import com.jabiz.erp.util.SecurityUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -30,6 +31,5 @@ public class PrimitiveEntity {
     @Column(insertable = false)
     @LastModifiedBy
     protected Long updatedBy;
-
 
 }

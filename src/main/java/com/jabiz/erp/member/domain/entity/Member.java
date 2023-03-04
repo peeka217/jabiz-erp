@@ -15,6 +15,7 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long erpId;
+    private String erpName;
 
     private String signupCode;
     private String memberStateCode;
@@ -35,14 +36,17 @@ public class Member {
     private String marketingYn;
 
     @Builder
-    public Member(Long id, Long erpId,
+    public Member(Long id,
+                  Long erpId, String erpName,
                   String signupCode, String memberStateCode, String memberCode,
                   String authority, String accessible,
                   String realName, String nickname, String profileImage, String birthday, String gender,
                   String email, String passwordDigest,
                   String marketingYn) {
         this.id = id;
+
         this.erpId = erpId;
+        this.erpName = erpName;
 
         this.signupCode = signupCode;
         this.memberStateCode = memberStateCode;

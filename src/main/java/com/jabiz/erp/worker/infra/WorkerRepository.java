@@ -15,6 +15,9 @@ public interface WorkerRepository extends JpaRepository<Worker, Long>, WorkerRep
 
     Page<Worker> findWithSearchCriteria(WorkerSearchCriteria searchCriteria, Pageable pageable);
 
+    Page<Worker> findByRealNameContaining(String workerName, Pageable pageable);
+    Page<Worker> findByRealNameContainingAndIdLessThan(String workerName, Long id, Pageable pageable);
+
     void updateWorkerState(Worker worker);
 
 }

@@ -3,6 +3,7 @@ package com.jabiz.erp.business.domain.entity;
 import com.jabiz.erp.business.domain.constant.BusinessStateCode;
 import com.jabiz.erp.business.domain.constant.BusinessPartCode;
 import com.jabiz.erp.primitive.entity.PrimitiveEntity;
+import com.jabiz.erp.util.SecurityUtil;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -55,6 +56,13 @@ public class BusinessRecord extends PrimitiveEntity {
     private String agentName;
     private Long approverId;
     private String approverName;
+
+    public BusinessRecord setAgent() {
+        this.agentId = SecurityUtil.getMemberId();
+        this.agentName = SecurityUtil.getMemberRealname();
+
+        return this;
+    }
 
     @Builder
     public BusinessRecord(Long id,

@@ -11,12 +11,15 @@ import java.util.List;
 public class PagingResponse {
 
     private Integer totalPagesCount;
+    private List<? extends Object> pages;
 
-    private List<Object> pages;
+
+
+
 
     @Builder
-    public PagingResponse(Integer totalPagesCount, List<Object> pages) {
-        this.totalPagesCount = totalPagesCount;
+    public PagingResponse(Integer totalPagesCount, List<? extends Object> pages) {
         this.pages = pages;
+        this.totalPagesCount = totalPagesCount;
     }
 }

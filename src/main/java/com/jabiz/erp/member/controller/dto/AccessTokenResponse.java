@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 public class AccessTokenResponse {
 
     private Long id;
+
+    private Long erpId;
+    private String erpName;
+
     private String realName;
     private String nickname;
 
@@ -26,6 +30,10 @@ public class AccessTokenResponse {
     public static AccessTokenResponse of(AccessToken tokenDto, Member member) {
         return AccessTokenResponse.builder()
                 .id(member.getId())
+
+                .erpId(member.getErpId())
+                .erpName(member.getErpName())
+
                 .realName(member.getRealName())
                 .nickname(member.getNickname())
                 .grantType(tokenDto.getGrantType())
@@ -38,10 +46,15 @@ public class AccessTokenResponse {
 
     @Builder
     public AccessTokenResponse(Long id,
+                               Long erpId, String erpName,
                                String realName, String nickname,
                                String grantType, String accessToken, String refreshToken, String accessTokenExpiresIn,
                                String accessible) {
         this.id = id;
+
+        this.erpId = erpId;
+        this.erpName = erpName;
+
         this.realName = realName;
         this.nickname = nickname;
         this.grantType = grantType;

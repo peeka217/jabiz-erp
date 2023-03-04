@@ -24,9 +24,31 @@ public class WorkerService {
 
     private final WorkerRepository workerRepository;
 
+
     public List<WorkerResponse> lookUpWorkers(WorkerSearchCriteria searchCriteria, int pagingNumber , int pagingSize) {
         List<Worker> workers = workerRepository.findWithSearchCriteria(searchCriteria,
                 PageRequest.of(pagingNumber, pagingSize)).getContent();
+
+        List<WorkerResponse> workerResponses = new ArrayList<>();
+        workers.forEach(worker -> {
+            workerResponses.add(WorkerResponse.of(worker));
+        });
+
+        return workerResponses;
+    }
+
+    public List<WorkerResponse> lookUpWorkersToInput(WorkerSearchCriteria searchCriteria) {
+
+        List<Worker> workers = new ArrayList<>();
+        if (searchCriteria.getId() == null) {
+            workers = workerRepository.findByRealNameContaining(searchCriteria.getRealName(),
+                    PageRequest.of(searchCriteria.getPagingNumber(), searchCriteria.getPagingSize(),
+                            Sort.by(Sort.Order.desc("id")))).getContent();
+        } else {
+            workers = workerRepository.findByRealNameContainingAndIdLessThan(searchCriteria.getRealName(), searchCriteria.getId(),
+                    PageRequest.of(searchCriteria.getPagingNumber(), searchCriteria.getPagingSize(),
+                            Sort.by(Sort.Order.desc("id")))).getContent();
+        }
 
         List<WorkerResponse> workerResponses = new ArrayList<>();
         workers.forEach(worker -> {

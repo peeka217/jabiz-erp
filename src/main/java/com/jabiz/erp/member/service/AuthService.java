@@ -44,7 +44,7 @@ public class AuthService {
         return AccessTokenResponse.of(accessToken, member);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AccessTokenResponse signin(MemberRequest memberRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = memberRequest.toAuthentication();
 
