@@ -18,7 +18,7 @@ import java.time.LocalTime;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BusinessRecordRequest {
 
-    private Long id;
+    private Long businessRecordId;
 
     private BusinessStateCode businessStateCode;
     private String businessStateName;
@@ -63,7 +63,7 @@ public class BusinessRecordRequest {
 
     public BusinessRecord toBusinessRecordForBusinessStateChange() {
         return BusinessRecord.builder()
-                .id(this.id)
+                .id(this.businessRecordId)
 
                 .businessStateCode(this.nextBusinessStateCode)
                 .businessStateName(this.nextBusinessStateCode.getName())
@@ -72,7 +72,7 @@ public class BusinessRecordRequest {
     }
     public BusinessRecord toBusinessRecord() {
         return BusinessRecord.builder()
-                .id(this.id)
+                .id(this.businessRecordId)
 
                 .businessStateCode(this.businessStateCode)
                 .businessStateName(this.businessStateName)

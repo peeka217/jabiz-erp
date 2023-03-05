@@ -16,6 +16,6 @@ public interface BusinessRecordRepositoryCustom {
     void updateBusinessState(BusinessRecord businessRecord);
     void updateBusinessRecord(BusinessRecord businessRecord);
 
-    List<Dashboard> findBySiteIdInGroupByBusinessState(List<Long> siteIds);
+    List<Dashboard> findBySiteIdsInGroupByBusinessState(List<Long> siteIds, LocalDate workAt);
 
 }

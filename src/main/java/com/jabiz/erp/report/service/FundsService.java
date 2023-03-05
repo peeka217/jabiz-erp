@@ -28,7 +28,7 @@ public class FundsService {
     private final FundsDailyRecordRepository fundsDailyRecordRepository;
     private final FundsRecordRepository fundsRecordRepository;
 
-    public FundingStatusResponse lookUpDailyFundingStatus(FundingStatusSearchCriteria searchCriteria) {
+    public FundingStatusResponse searchDailyFundingStatus(FundingStatusSearchCriteria searchCriteria) {
         List<FundsDailyRecordResponse> fundsDailyRecordResponses = new ArrayList<>();
         List<FundsDailyRecord> fundsDailyRecords = fundsDailyRecordRepository.findBySearchCriteria(searchCriteria);
 
@@ -61,7 +61,7 @@ public class FundsService {
             fundsRecordRepository.save(fundsRecordRequest.toFundsRecord());
         });
 
-        return this.lookUpDailyFundingStatus(
+        return this.searchDailyFundingStatus(
                 FundingStatusSearchCriteria.builder()
                 .companyId(fundsRecordRequests.get(0).getCompanyId())
                 .tradedAt(fundsRecordRequests.get(0).getTradedAt())
@@ -76,7 +76,7 @@ public class FundsService {
             fundsRecordRepository.updateFundsRecord(fundsRecordRequest.toFundsRecord());
         });
 
-        return this.lookUpDailyFundingStatus(
+        return this.searchDailyFundingStatus(
                 FundingStatusSearchCriteria.builder()
                         .companyId(fundsRecordRequests.get(0).getCompanyId())
                         .ToTradedAt(fundsRecordRequests.get(0).getTradedAt())
@@ -91,7 +91,7 @@ public class FundsService {
             fundsRecordRepository.delete(fundsRecordRequest.toFundsRecord());
         });
 
-        return this.lookUpDailyFundingStatus(
+        return this.searchDailyFundingStatus(
                 FundingStatusSearchCriteria.builder()
                         .companyId(fundsRecordRequests.get(0).getCompanyId())
                         .tradedAt(fundsRecordRequests.get(0).getTradedAt())

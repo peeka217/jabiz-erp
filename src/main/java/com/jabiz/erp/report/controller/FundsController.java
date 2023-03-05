@@ -19,12 +19,12 @@ public class FundsController {
     private final FundsService fundsService;
 
     @GetMapping("/report/funds/status")
-    public ResponseEntity<FundingStatusResponse> lookUpDailyFundingStatus(
+    public ResponseEntity<FundingStatusResponse> searchDailyFundingStatus(
             @RequestParam(value = "company_id", required = false) Long companyId,
             @RequestParam(value = "transaction_timestamp") LocalDate transactionTimestamp,
             @RequestParam(value = "paging_number") int pagingNumber,
             @RequestParam(value = "paging_size") int pagingSize) {
-        return ResponseEntity.ok(fundsService.lookUpDailyFundingStatus(
+        return ResponseEntity.ok(fundsService.searchDailyFundingStatus(
                 FundingStatusSearchCriteria.builder()
                         .companyId(companyId)
                         .tradedAt(transactionTimestamp)

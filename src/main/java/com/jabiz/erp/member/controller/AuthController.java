@@ -15,13 +15,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<AccessTokenResponse> signup(@RequestBody MemberRequest memberRequest) {
-        return ResponseEntity.ok(authService.signup(memberRequest));
+    public ResponseEntity<AccessTokenResponse> signup(@RequestBody MemberRequest request) {
+        return ResponseEntity.ok(authService.signup(request));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AccessTokenResponse> signin(@RequestBody MemberRequest memberRequest) {
-        return ResponseEntity.ok(authService.signin(memberRequest));
+    public ResponseEntity<AccessTokenResponse> signin(@RequestBody MemberRequest request) {
+        return ResponseEntity.ok(authService.signin(request));
     }
 
     @GetMapping("/healthcheck")

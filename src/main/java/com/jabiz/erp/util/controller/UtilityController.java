@@ -21,16 +21,16 @@ public class UtilityController {
     private final UtilityService utilityService;
 
     @GetMapping("/selectboxes/systemcode")
-    public ResponseEntity<Map<String, List<SelectBoxForCodeResponse>>> lookUpSystemCodesForSelectBox(
+    public ResponseEntity<Map<String, List<SelectBoxForCodeResponse>>> searchSystemCodesForSelectBox(
             @RequestParam(value = "code_categories") List<String> codeCategories,
             @RequestParam(value = "menu_code") String menuCode) {
 
-        return ResponseEntity.ok(utilityService.lookUpSystemCodesForSelectBox(codeCategories, menuCode));
+        return ResponseEntity.ok(utilityService.searchSystemCodesForSelectBox(codeCategories, menuCode));
     }
 
     @GetMapping("/selectboxes/id")
-    public ResponseEntity<Map<String, List<SelectBoxForIdResponse>>> lookUpIdsforSelectBox(
+    public ResponseEntity<Map<String, List<SelectBoxForIdResponse>>> searchIdsforSelectBox(
             @RequestParam(value = "id_categories") List<String> idCategories) {
-        return ResponseEntity.ok(utilityService.lookUpIdsForSelectBox(idCategories));
+        return ResponseEntity.ok(utilityService.searchIdsForSelectBox(idCategories));
     }
 }

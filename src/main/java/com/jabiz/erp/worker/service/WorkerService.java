@@ -25,7 +25,7 @@ public class WorkerService {
     private final WorkerRepository workerRepository;
 
 
-    public List<WorkerResponse> lookUpWorkers(WorkerSearchCriteria searchCriteria, int pagingNumber , int pagingSize) {
+    public List<WorkerResponse> searchWorkers(WorkerSearchCriteria searchCriteria, int pagingNumber , int pagingSize) {
         List<Worker> workers = workerRepository.findWithSearchCriteria(searchCriteria,
                 PageRequest.of(pagingNumber, pagingSize)).getContent();
 
@@ -37,7 +37,7 @@ public class WorkerService {
         return workerResponses;
     }
 
-    public List<WorkerResponse> lookUpWorkersToInput(WorkerSearchCriteria searchCriteria) {
+    public List<WorkerResponse> searchWorkersToInput(WorkerSearchCriteria searchCriteria) {
 
         List<Worker> workers = new ArrayList<>();
         if (searchCriteria.getId() == null) {
@@ -64,7 +64,7 @@ public class WorkerService {
             workerRepository.save(workerRequest.toWorkerForRegistration());
         });
 
-        return this.lookUpWorkers(WorkerSearchCriteria.builder()
+        return this.searchWorkers(WorkerSearchCriteria.builder()
                 .nationalityCode(workerRequests.get(0).getNationalityCode()).build(),
                 0, DEFAULT_PAGING_SIZE);
     }

@@ -24,7 +24,7 @@ public class UtilityService {
     private final SiteRepository siteRepository;
 
     @Transactional(readOnly = true)
-    public Map<String, List<SelectBoxForCodeResponse>> lookUpSystemCodesForSelectBox(List<String> codeCategories, String menuCode) {
+    public Map<String, List<SelectBoxForCodeResponse>> searchSystemCodesForSelectBox(List<String> codeCategories, String menuCode) {
         Map<String, List<SelectBoxForCodeResponse>> selectBoxMap = new HashMap<>();
         codeCategories.forEach(codeCategory -> {
             List<SystemCode> systemCodes =  systemCodeRepository.findByCodeCategoryOrderBySortSeqAsc(codeCategory)
@@ -42,7 +42,7 @@ public class UtilityService {
     }
 
     @Transactional(readOnly = true)
-    public Map<String, List<SelectBoxForIdResponse>> lookUpIdsForSelectBox(List<String> idCategories) {
+    public Map<String, List<SelectBoxForIdResponse>> searchIdsForSelectBox(List<String> idCategories) {
         Map<String, List<SelectBoxForIdResponse>> selectBoxMap = new HashMap<>();
         idCategories.forEach(idCategory -> {
             switch (idCategory) {

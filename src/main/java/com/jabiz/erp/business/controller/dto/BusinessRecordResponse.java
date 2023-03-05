@@ -17,7 +17,7 @@ import java.time.LocalTime;
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class BusinessRecordResponse {
 
-    private Long id;
+    private Long businessRecordId;
 
     private BusinessStateCode businessStateCode;
     private String businessStateName;
@@ -54,7 +54,7 @@ public class BusinessRecordResponse {
 
     public static BusinessRecordResponse of(BusinessRecord businessRecord) {
         return BusinessRecordResponse.builder()
-                .id(businessRecord.getId())
+                .businessRecordId(businessRecord.getId())
 
                 .businessStateCode(businessRecord.getBusinessStateCode())
                 .businessStateName(businessRecord.getBusinessStateName())
@@ -93,7 +93,7 @@ public class BusinessRecordResponse {
     }
 
     @Builder
-    public BusinessRecordResponse(Long id,
+    public BusinessRecordResponse(Long businessRecordId,
                                   BusinessStateCode businessStateCode, String businessStateName,
 
                                   Long siteId, String siteName, LocalDate workedAt, BusinessPartCode businessPartCode, String businessPartName,
@@ -107,7 +107,7 @@ public class BusinessRecordResponse {
                                   String note,
 
                                   Long agentId, String agentName, Long approverId, String approverName) {
-        this.id = id;
+        this.businessRecordId = businessRecordId;
 
         this.businessStateCode = businessStateCode;
         this.businessStateName = businessStateName;

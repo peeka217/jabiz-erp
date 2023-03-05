@@ -28,8 +28,8 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public AccessTokenResponse signup(MemberRequest memberRequest) {
-        Member member = memberRequest.toMember(passwordEncoder);
+    public AccessTokenResponse signup(MemberRequest request) {
+        Member member = request.toMember(passwordEncoder);
         member.setId(memberRepository.save(member).getId());
 
         AccessToken accessToken = new AccessToken();
@@ -45,8 +45,8 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public AccessTokenResponse signin(MemberRequest memberRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequest.toAuthentication();
+    public AccessTokenResponse signin(MemberRequest request) {
+        UsernamePasswordAuthenticationToken authenticationToken = request.toAuthentication();
 
         Authentication authentication;
         AccessToken accessToken;

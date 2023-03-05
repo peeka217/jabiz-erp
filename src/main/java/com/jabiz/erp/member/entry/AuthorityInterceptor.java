@@ -1,5 +1,8 @@
 package com.jabiz.erp.member.entry;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.jabiz.erp.business.domain.constant.BusinessStateCode;
 import com.jabiz.erp.exception.UnauthorizedAccessException;
 import com.jabiz.erp.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,21 +12,25 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class AuthorityInterceptor implements HandlerInterceptor {
 
-    private final Map<String, String> MENU_CODES = Map.of(
-//            "utility/selectbox", "0100",
-//            "foundation/dashboard", "0200",
+    private final Map<String, String> MENU_CODES = ImmutableMap.<String, String>builder()
+            .put("business/registration", "1100")
+            .put("business/process", "1200")
+            .put("worker/information", "2100")
+            .put("report/funds", "4100")
+            .build();
 
-            "business/registration", "1100",
-            "business/process", "1200",
-            "worker/information", "2100",
-            "report/funds", "3100"
-    );
+    private final List<String> PUBLIC_URI_PATTERN = ImmutableList.<String>builder()
+            .add("public")
+            .add("utility")
+            .add("dashboard")
+            .build();
     private final TokenProvider tokenProvider;
 
     @Override
@@ -31,7 +38,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         String accessToken = tokenProvider.resolveToken(request);
         String[] requestUriArr = request.getRequestURI().substring(4).split("/");
 
-        if (requestUriArr[0].equals("public") || requestUriArr[0].equals("utility"))
+        if (PUBLIC_URI_PATTERN.contains(requestUriArr[0]))
             return true;
 
         String requestUriPrefix = requestUriArr[0] + "/" + requestUriArr[1];

@@ -34,17 +34,20 @@ public class BusinessRecordRepositoryImpl implements BusinessRecordRepositoryCus
     private final EntityManager em;
 
     @Override
-    public List<Dashboard> findBySiteIdInGroupByBusinessState(List<Long> siteIds) {
+    public List<Dashboard> findBySiteIdsInGroupByBusinessState(List<Long> siteIds, LocalDate workedAt) {
         List<Dashboard> dashboards = queryFactory
                 .select(new QDashboard(
                         businessRecord.siteId,
                         businessRecord.siteName,
                         businessRecord.businessStateCode,
                         businessRecord.businessStateName,
-                        ExpressionUtils.as(businessRecord.siteId.count(), "recordCount")
+                        ExpressionUtils.as(businessRecord.businessStateCode.count(), "recordCount")
                 ))
                 .from(businessRecord)
-                .where(this.inSiteIds(siteIds))
+                .where(
+                        this.inSiteIds(siteIds),
+                        this.equalsWorkedAt(workedAt)
+                )
                 .groupBy(businessRecord.siteId, businessRecord.businessStateCode)
                 .orderBy(businessRecord.id.desc())
                 .fetch();
@@ -170,9 +173,11 @@ public class BusinessRecordRepositoryImpl implements BusinessRecordRepositoryCus
     }
 
     private BooleanExpression betweenWorkedAt(LocalDate fromWorkedAt, LocalDate toWorkedAt) {
-        if (fromWorkedAt == null)
-            return null;
-        return businessRecord.workedAt.between(fromWorkedAt, toWorkedAt);
+        return fromWorkedAt == null ? null : businessRecord.workedAt.between(fromWorkedAt, toWorkedAt);
+    }
+
+    private BooleanExpression equalsWorkedAt(LocalDate workedAt) {
+        return workedAt == null ? null : businessRecord.workedAt.eq(workedAt);
     }
 
     private BooleanExpression equalsBbusinessPartCode(BusinessPartCode businessPartCode) {

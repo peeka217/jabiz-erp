@@ -1,5 +1,6 @@
 package com.jabiz.erp.business.service;
 
+import com.google.common.collect.ImmutableList;
 import com.jabiz.erp.business.controller.dto.BusinessRecordRequest;
 import com.jabiz.erp.business.controller.dto.BusinessRecordResponse;
 import com.jabiz.erp.business.controller.dto.BusinessRecordSearchCriteria;
@@ -31,14 +32,7 @@ public class BusinessService {
     private final BusinessRecordRepository businessRecordRepository;
 
     @Transactional(readOnly = true)
-    public PagingResponse lookUpBusinessRecordsForRegistration(BusinessRecordSearchCriteria searchCriteria) {
-
-        List<Long> temp = new ArrayList<>();
-        temp.add(1L);
-        temp.add(2L);
-        List<Dashboard> temp2 = businessRecordRepository.findBySiteIdInGroupByBusinessState(temp);
-
-
+    public PagingResponse searchBusinessRecordsForRegistration(BusinessRecordSearchCriteria searchCriteria) {
         List<BusinessRecord> businessRecords = businessRecordRepository
                 .findWithSearchCriteria(searchCriteria)
                 .getContent();
@@ -55,11 +49,15 @@ public class BusinessService {
     }
 
     @Transactional(readOnly = true)
-    public PagingResponse lookUpBusinessRecordsForProcess(BusinessRecordSearchCriteria searchCriteria) {
+    public PagingResponse searchBusinessRecordsForProcess(BusinessRecordSearchCriteria searchCriteria) {
         List<BusinessRecord> businessRecords = businessRecordRepository
                 .findWithSearchCriteria(searchCriteria.getBusinessStateCodes() != null ? searchCriteria
-                                : searchCriteria.searchLimitedByStateCodes(
-                                Arrays.asList(BusinessStateCode.BS02, BusinessStateCode.BS03, BusinessStateCode.BS04)))
+                        : searchCriteria.searchLimitedByStateCodes(
+                        ImmutableList.<BusinessStateCode>builder()
+                                .add(BusinessStateCode.BS02)
+                                .add(BusinessStateCode.BS03)
+                                .add(BusinessStateCode.BS04)
+                                .build()))
                 .getContent();
 
         List<BusinessRecordResponse> businessRecordResponses = new ArrayList<>();
@@ -69,13 +67,13 @@ public class BusinessService {
 
         return PagingResponse.builder()
                 .totalPagesCount(businessRecordResponses.size())
-                .pages(Collections.singletonList(businessRecordResponses))
+                .pages(businessRecordResponses)
                 .build();
     }
 
     @Transactional
-    public void changeBusinessState(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public void changeBusinessState(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             if (!BusinessStateCode.isChangeableState(request.getBusinessStateCode(), request.getNextBusinessStateCode()))
                 throw new UnauthorizedAccessException();
             businessRecordRepository.updateBusinessState(request.toBusinessRecordForBusinessStateChange());
@@ -84,14 +82,14 @@ public class BusinessService {
 
 
     @Transactional
-    public PagingResponse registerBusinessRecord(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public PagingResponse registerBusinessRecord(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             businessRecordRepository.save(request.toBusinessRecord().setAgent());
         });
 
-        return this.lookUpBusinessRecordsForRegistration(
+        return this.searchBusinessRecordsForRegistration(
                 BusinessRecordSearchCriteria.builder()
-                        .siteId(businessRecordRequests.get(0).getSiteId())
+                        .siteId(requests.get(0).getSiteId())
                         .pagingNumber(0)
                         .pagingSize(DEFAULT_PAGING_SIZE)
                         .build());
@@ -99,13 +97,13 @@ public class BusinessService {
     }
 
     @Transactional
-    public void editBusinessRecordsForRegistration(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public void editBusinessRecordsForRegistration(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             BusinessRecord businessRecord = request
                     .toBusinessRecord();
 
             if (!BusinessStateCode.isManipulableForRegistration(
-                    businessRecordRepository.findById(request.getId())
+                    businessRecordRepository.findById(request.getBusinessRecordId())
                             .orElseThrow(ResourceNotFoundException::new)
                             .getBusinessStateCode()))
                 throw new UnauthorizedAccessException();
@@ -115,8 +113,8 @@ public class BusinessService {
     }
 
     @Transactional
-    public void editBusinessRecordsForProcess(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public void editBusinessRecordsForProcess(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             BusinessRecord businessRecord = request
                     .toBusinessRecord();
 
@@ -125,10 +123,10 @@ public class BusinessService {
     }
 
     @Transactional
-    public void deleteBusinessRecordForRegistration(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public void deleteBusinessRecordForRegistration(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             if (!BusinessStateCode.isManipulableForRegistration(
-                    businessRecordRepository.findById(request.getId())
+                    businessRecordRepository.findById(request.getBusinessRecordId())
                             .orElseThrow(ResourceNotFoundException::new)
                             .getBusinessStateCode()))
                 throw new UnauthorizedAccessException();
@@ -138,8 +136,8 @@ public class BusinessService {
     }
 
     @Transactional
-    public void deleteBusinessRecordForProcess(List<BusinessRecordRequest> businessRecordRequests) {
-        businessRecordRequests.forEach(request -> {
+    public void deleteBusinessRecordForProcess(List<BusinessRecordRequest> requests) {
+        requests.forEach(request -> {
             businessRecordRepository.delete(request.toBusinessRecord());
         });
     }
